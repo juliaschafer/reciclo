@@ -416,10 +416,20 @@ window.renderRankingTable = (filtro) => {
 
 // --- LOGIN E NAVEGAÇÃO ---
 window.fazerLogin = async () => {
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
-    // Senha padrão reciclo123 para facilitar acesso agora
-    if (user === "adm_escola" && pass === "reciclo123") {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    
+    // Função para transformar a senha em código secreto (Hash)
+    const encoder = new TextEncoder();
+    const data = encoder.encode(pass);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashDigitado = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+    // O código secreto da sua senha original
+    const SENHA_HASH_CORRETA = "a38533bfd1a5848f9edab79e6850b1dc22da1441a1ae17bbf4d143dde221dee4";
+
+    if (user === "adm_escola" && hashDigitado === SENHA_HASH_CORRETA) {
         isAdminLogged = true;
         document.getElementById('login-modal').classList.add('hidden');
         document.getElementById('public-view').classList.add('hidden');
@@ -427,7 +437,9 @@ window.fazerLogin = async () => {
         document.getElementById('btn-admin').classList.add('hidden');
         document.getElementById('admin-logged').classList.remove('hidden');
         document.getElementById('admin-name').innerText = user;
-    } else { alert("Login incorreto"); }
+    } else { 
+        alert("❌ Usuário ou senha incorretos!"); 
+    }
 };
 
 window.logout = () => location.reload();
