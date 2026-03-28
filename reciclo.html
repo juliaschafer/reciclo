@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>♻️ ReCiclo - Campanha de Reciclagem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --green: #10b981;
+            --blue: #3b82f6;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .header-bg {
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(16 185 129 / 0.2), 
+                       0 8px 10px -6px rgb(16 185 129 / 0.2);
+        }
+        
+        .progress-bar {
+            transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .modal {
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        @keyframes modalPop {
+            0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        
+        .recycle-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- NAVBAR -->
+<nav class="header-bg text-white shadow-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <i class="fa-solid fa-leaf text-5xl recycle-icon"></i>
+            <div>
+                <h1 class="text-4xl font-bold tracking-tighter">ReCiclo</h1>
+                <p class="text-sm opacity-90 -mt-1">Gamificação da Reciclagem</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <button onclick="showPublicView()" 
+                    class="flex items-center gap-3 px-6 py-3 rounded-3xl hover:bg-white/20 transition-all font-medium text-lg"
+                    id="btn-public">
+                <i class="fa-solid fa-trophy"></i>
+                <span>Ranking Público</span>
+            </button>
+            
+            <button onclick="showLoginModal()" 
+                    class="flex items-center gap-3 bg-white text-emerald-700 px-8 py-3 rounded-3xl font-semibold hover:scale-105 transition-all shadow-lg"
+                    id="btn-admin">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Área Admin</span>
+            </button>
+            
+            <!-- Admin Logado -->
+            <div id="admin-logged" class="hidden items-center gap-4">
+                <div class="flex items-center gap-3 bg-white/20 px-5 py-2 rounded-3xl">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span id="admin-name" class="font-semibold"></span>
+                </div>
+                <button onclick="logout()" 
+                        class="px-6 py-3 bg-white/10 hover:bg-white/30 rounded-3xl transition-all">
+                    Sair
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- PUBLIC VIEW -->
+<div id="public-view" class="max-w-7xl mx-auto px-6 py-10">
+    <div class="text-center mb-12">
+        <h2 class="text-5xl font-bold gradient-text mb-4">
+            Quem está liderando o ReCiclo? 🌱
+        </h2>
+        <p class="text-xl text-gray-600 max-w-lg mx-auto">
+            Competição entre as séries • Atualização em tempo real • Pelo planeta!
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16" id="progress-bars"></div>
+
+    <div class="mb-16">
+        <h3 class="text-3xl font-bold mb-8 flex items-center gap-4">
+            <i class="fa-solid fa-medal text-yellow-500"></i>
+            PODIUM - Top 3 Séries
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="top-three"></div>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-2xl p-10">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
+            <h3 class="text-3xl font-semibold">Ranking Geral por Série</h3>
+            <div class="flex gap-2 bg-gray-100 p-1 rounded-3xl">
+                <span onclick="filterRanking('all')" id="filter-all" class="px-6 py-2 rounded-3xl cursor-pointer font-medium active-filter">Todas</span>
+                <span onclick="filterRanking('6')" id="filter-6" class="px-6 py-2 rounded-3xl cursor-pointer hover:bg-white">6º ano</span>
+                <span onclick="filterRanking('7')" id="filter-7" class="px-6 py-2 rounded-3xl cursor-pointer hover:bg-white">7º ano</span>
+                <span onclick="filterRanking('8')" id="filter-8" class="px-6 py-2 rounded-3xl cursor-pointer hover:bg-white">8º ano</span>
+                <span onclick="filterRanking('9')" id="filter-9" class="px-6 py-2 rounded-3xl cursor-pointer hover:bg-white">9º ano</span>
+            </div>
+        </div>
+        <table class="w-full" id="ranking-table">
+            <thead>
+                <tr class="border-b border-gray-200 text-gray-500 text-sm">
+                    <th class="py-5 text-left font-medium">Posição</th>
+                    <th class="py-5 text-left font-medium">Série</th>
+                    <th class="py-5 text-right font-medium">Pontuação</th>
+                    <th class="py-5 text-right font-medium">Kg Reciclados</th>
+                </tr>
+            </thead>
+            <tbody id="ranking-body" class="text-lg"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="admin-dashboard" class="hidden max-w-7xl mx-auto px-6 py-10">
+    <div class="flex justify-between items-center mb-10">
+        <h2 class="text-4xl font-bold flex items-center gap-4">
+            <i class="fa-solid fa-user-shield text-emerald-600"></i>
+            Painel do Administrador
+        </h2>
+        <button onclick="logout()" class="flex items-center gap-3 text-red-600 hover:text-red-700 font-medium">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Sair da Área Admin</span>
+        </button>
+    </div>
+
+    <!-- Formulário de Registro -->
+    <div class="bg-white rounded-3xl shadow-2xl p-10 mb-12">
+        <h3 class="text-2xl font-semibold mb-8">Registrar Materiais Reciclados</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div>
+                <label class="block text-sm font-medium mb-3">Série</label>
+                <select id="select-serie" class="w-full px-5 py-4 rounded-2xl border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none">
+                    <option value="6º ano">6º ano</option>
+                    <option value="7º ano">7º ano</option>
+                    <option value="8º ano">8º ano</option>
+                    <option value="9º ano">9º ano</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-3">Material</label>
+                <select id="select-material" class="w-full px-5 py-4 rounded-2xl border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none">
+                    <option value="Tampinhas">Tampinhas (300 pts/kg)</option>
+                    <option value="Garrafa PET">Garrafa PET (200 pts/kg)</option>
+                    <option value="Garrafa de refrigerante">Garrafa de refrigerante (400 pts/kg)</option>
+                    <option value="Papelão">Papelão (200 pts/kg)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-3">Quantidade (kg)</label>
+                <input type="number" id="quantidade" step="0.01" min="0" value="1"
+                       class="w-full px-5 py-4 rounded-2xl border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none">
+            </div>
+            <div class="flex items-end">
+                <button onclick="addRegistro()"
+                        class="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all">
+                    <i class="fa-solid fa-plus"></i>
+                    REGISTRAR RECICLAGEM
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela de Registros -->
+    <div class="bg-white rounded-3xl shadow-2xl p-10">
+        <h3 class="text-2xl font-semibold mb-8">Histórico de Registros</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-full" id="registros-table">
+                <thead>
+                    <tr class="text-left border-b text-sm text-gray-500">
+                        <th class="py-5">Data</th>
+                        <th class="py-5">Série</th>
+                        <th class="py-5">Material</th>
+                        <th class="py-5 text-right">Quantidade (kg)</th>
+                        <th class="py-5 text-right">Pontos</th>
+                        <th class="py-5 w-20 text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="registros-body" class="text-base"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[100]">
+    <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full mx-4 modal">
+        <div class="flex justify-between items-center mb-10">
+            <h3 class="text-3xl font-bold text-gray-800">Login Administrador</h3>
+            <i onclick="hideLoginModal()" class="fa-solid fa-xmark text-4xl cursor-pointer text-gray-400 hover:text-gray-600"></i>
+        </div>
+        
+        <div class="space-y-8">
+            <div>
+                <label class="block text-sm font-medium mb-3">Usuário</label>
+                <input id="username" type="text" placeholder="Usuário" 
+                       class="w-full px-6 py-5 rounded-2xl border border-gray-300 focus:border-emerald-500 text-lg">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-3">Senha</label>
+                <input id="password" type="password" placeholder="Senha" 
+                       class="w-full px-6 py-5 rounded-2xl border border-gray-300 focus:border-emerald-500 text-lg">
+            </div>
+            
+            <button onclick="fazerLogin()"
+                    class="w-full py-6 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white rounded-3xl font-bold text-xl flex items-center justify-center gap-4">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                ENTRAR NO PAINEL
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ==================== DADOS E LÓGICA ====================
+let registros = JSON.parse(localStorage.getItem('eco_registros')) || [];
+let isAdminLogged = false;
+
+const materiais = {
+    "Tampinhas": 300,
+    "Garrafa PET": 200,
+    "Garrafa de refrigerante": 400,
+    "Papelão": 200
+};
+
+const series = ["6º ano", "7º ano", "8º ano", "9º ano"];
+
+function saveData() {
+    localStorage.setItem('eco_registros', JSON.stringify(registros));
+}
+
+function calcularRanking() {
+    let ranking = {};
+    series.forEach(serie => ranking[serie] = { pontos: 0, kg: 0 });
+
+    registros.forEach(reg => {
+        if (ranking[reg.serie]) {
+            ranking[reg.serie].pontos += reg.pontos;
+            ranking[reg.serie].kg += reg.quantidade;
+        }
+    });
+
+    return Object.keys(ranking)
+        .map(serie => ({
+            serie,
+            pontos: ranking[serie].pontos,
+            kg: ranking[serie].kg.toFixed(2)
+        }))
+        .sort((a, b) => b.pontos - a.pontos);
+}
+
+// Atualizações da interface
+function atualizarProgressBars() {
+    const container = document.getElementById('progress-bars');
+    container.innerHTML = '';
+    const ranking = calcularRanking();
+    const maxPontos = Math.max(...ranking.map(r => r.pontos)) || 1000;
+
+    ranking.forEach(item => {
+        const percent = Math.min(Math.round((item.pontos / maxPontos) * 100), 100);
+        const div = document.createElement('div');
+        div.className = 'bg-white rounded-3xl shadow-xl p-8 card-hover';
+        div.innerHTML = `
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <div class="font-bold text-2xl">${item.serie}</div>
+                    <div class="text-emerald-600 text-4xl font-bold mt-2">${item.pontos.toLocaleString('pt-BR')}</div>
+                </div>
+                <i class="fa-solid fa-leaf text-5xl text-emerald-100"></i>
+            </div>
+            <div class="h-4 bg-gray-100 rounded-3xl overflow-hidden">
+                <div class="progress-bar h-4 bg-gradient-to-r from-emerald-400 to-blue-500" style="width: ${percent}%"></div>
+            </div>
+            <div class="flex justify-between text-sm text-gray-500 mt-3">
+                <span>Progresso</span>
+                <span>${item.kg} kg</span>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+
+    if (ranking.length === 0) {
+        container.innerHTML = `<div class="col-span-4 text-center py-20 text-gray-400 text-2xl">Ainda não há registros. Comece a reciclar! ♻️</div>`;
+    }
+}
+
+function atualizarTopThree() {
+    const container = document.getElementById('top-three');
+    container.innerHTML = '';
+    const ranking = calcularRanking().slice(0, 3);
+    const medalhas = ['🥇', '🥈', '🥉'];
+
+    ranking.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'bg-white rounded-3xl shadow-2xl p-10 text-center card-hover';
+        div.innerHTML = `
+            <div class="text-8xl mb-6">${medalhas[i]}</div>
+            <div class="text-3xl font-bold mb-2">${item.serie}</div>
+            <div class="text-emerald-600 text-5xl font-bold">${item.pontos.toLocaleString('pt-BR')}</div>
+            <div class="text-gray-500 mt-1">${item.kg} kg reciclados</div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+function atualizarRankingTable(filtro = 'all') {
+    const tbody = document.getElementById('ranking-body');
+    tbody.innerHTML = '';
+    let ranking = calcularRanking();
+    if (filtro !== 'all') ranking = ranking.filter(r => r.serie.startsWith(filtro));
+    
+    ranking.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b hover:bg-emerald-50 transition-all';
+        tr.innerHTML = `
+            <td class="py-7 font-bold text-3xl text-center text-emerald-700">${index + 1}º</td>
+            <td class="py-7 font-semibold text-xl">${item.serie}</td>
+            <td class="py-7 text-right font-bold text-3xl text-emerald-600">${item.pontos.toLocaleString('pt-BR')}</td>
+            <td class="py-7 text-right font-medium text-lg">${item.kg} kg</td>
+        `;
+        tbody.appendChild(tr);
+    });
+    if (ranking.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-16 text-gray-400">Nenhum registro encontrado</td></tr>`;
+    }
+}
+
+function atualizarTabelaRegistros() {
+    const tbody = document.getElementById('registros-body');
+    tbody.innerHTML = '';
+    registros.sort((a, b) => new Date(b.data) - new Date(a.data));
+    
+    registros.forEach((reg, index) => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b hover:bg-gray-50';
+        tr.innerHTML = `
+            <td class="py-6">${new Date(reg.data).toLocaleDateString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</td>
+            <td class="py-6 font-medium">${reg.serie}</td>
+            <td class="py-6">${reg.material}</td>
+            <td class="py-6 text-right font-medium">${reg.quantidade} kg</td>
+            <td class="py-6 text-right font-bold text-emerald-600">${reg.pontos}</td>
+            <td class="py-6 text-center">
+                <button onclick="deletarRegistro(${index})" class="text-red-500 hover:text-red-700 p-2">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (registros.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-16 text-gray-400">Nenhum registro realizado ainda.</td></tr>`;
+    }
+}
+
+function addRegistro() {
+    const serie = document.getElementById('select-serie').value;
+    const material = document.getElementById('select-material').value;
+    const quantidade = parseFloat(document.getElementById('quantidade').value);
+
+    if (!quantidade || quantidade <= 0) {
+        alert("Por favor, insira uma quantidade válida.");
+        return;
+    }
+
+    const pontos = Math.round(quantidade * materiais[material]);
+
+    registros.push({
+        data: new Date().toISOString(),
+        serie: serie,
+        material: material,
+        quantidade: quantidade,
+        pontos: pontos
+    });
+
+    saveData();
+    atualizarTabelaRegistros();
+    atualizarProgressBars();
+    atualizarTopThree();
+    atualizarRankingTable();
+
+    const btn = document.querySelector('#admin-dashboard button[onclick="addRegistro()"]');
+    const original = btn.innerHTML;
+    btn.innerHTML = `<i class="fa-solid fa-check"></i> REGISTRADO COM SUCESSO!`;
+    btn.style.background = '#10b981';
+    setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; }, 2000);
+}
+
+function deletarRegistro(index) {
+    if (confirm('Tem certeza que deseja excluir este registro?')) {
+        registros.splice(index, 1);
+        saveData();
+        atualizarTabelaRegistros();
+        atualizarProgressBars();
+        atualizarTopThree();
+        atualizarRankingTable();
+    }
+}
+
+// ====================== LOGIN ======================
+function fazerLogin() {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+
+    if (user === "adm_escola" && pass === "_unijui_pi_grupo1") {
+        isAdminLogged = true;
+        hideLoginModal();
+        
+        document.getElementById('public-view').classList.add('hidden');
+        document.getElementById('admin-dashboard').classList.remove('hidden');
+        document.getElementById('btn-admin').classList.add('hidden');
+        document.getElementById('admin-logged').classList.remove('hidden');
+        document.getElementById('admin-name').innerText = user;
+
+        atualizarTabelaRegistros();
+    } else {
+        alert('❌ Usuário ou senha incorretos!');
+    }
+}
+
+function logout() {
+    isAdminLogged = false;
+    document.getElementById('admin-dashboard').classList.add('hidden');
+    document.getElementById('public-view').classList.remove('hidden');
+    document.getElementById('btn-admin').classList.remove('hidden');
+    document.getElementById('admin-logged').classList.add('hidden');
+}
+
+function showLoginModal() {
+    document.getElementById('login-modal').classList.remove('hidden');
+    document.getElementById('login-modal').classList.add('flex');
+}
+
+function hideLoginModal() {
+    document.getElementById('login-modal').classList.add('hidden');
+    document.getElementById('login-modal').classList.remove('flex');
+}
+
+function showPublicView() {
+    if (isAdminLogged) {
+        if (confirm('Deseja voltar para o ranking público?')) logout();
+    } else {
+        document.getElementById('admin-dashboard').classList.add('hidden');
+        document.getElementById('public-view').classList.remove('hidden');
+    }
+}
+
+function filterRanking(filtro) {
+    document.querySelectorAll('#ranking-table span').forEach(el => {
+        el.classList.remove('active-filter', 'bg-white', 'shadow-sm');
+    });
+    
+    if (filtro === 'all') {
+        document.getElementById('filter-all').classList.add('active-filter', 'bg-white', 'shadow-sm');
+    } else {
+        document.getElementById('filter-' + filtro).classList.add('active-filter', 'bg-white', 'shadow-sm');
+    }
+    atualizarRankingTable(filtro);
+}
+
+// Inicialização
+window.onload = function() {
+    atualizarProgressBars();
+    atualizarTopThree();
+    atualizarRankingTable();
+
+    setInterval(() => {
+        if (!isAdminLogged) {
+            atualizarProgressBars();
+            atualizarTopThree();
+            atualizarRankingTable();
+        }
+    }, 4000);
+};
+</script>
+</body>
+</html>
