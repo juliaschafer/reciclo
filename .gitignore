@@ -43,3 +43,12 @@ logs
 coverage/
 .cache/
 reciclo_backend/*.json
+# =========================
+# Ambiente (SEGURANÇA)
+# =========================
+.env
+.env.local
+.env.*.local
+firebase-key.json
+serviceAccountKey.jsonreciclo-23-firebase-adminsdk-fbsvc-ba870a15e5.json
+reciclo-23-firebase-adminsdk-fbsvc-ba870a15e5.json
