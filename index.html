@@ -40,6 +40,17 @@
   .dot-offline { background:#ef4444; box-shadow: 0 0 0 4px #fecaca; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
   .animate-pulse { animation: pulse 2s infinite; }
+
+
+  footer {
+    background: linear-gradient(135deg, #064e3b, #1e3a8a);
+    color: white;
+    margin-top: 4rem;
+  }
+  .logo-footer { height: 64px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.9; }
+</style>
+</head>
+
 </style>
 </head>
  
@@ -118,10 +129,20 @@
       </select>
  
       <select id="material" class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-gray-50">
-        <option value="Tampinhas">Tampinhas (300 pts/kg)</option>
-        <option value="Garrafa PET">Garrafa PET (200 pts/kg)</option>
-        <option value="Garrafa refrigerante">Garrafa refrigerante (400 pts/kg)</option>
-        <option value="Papelão">Papelão (200 pts/kg)</option>
+        <option value="Cobre" data-pts="5000">Cobre (5000 pts/kg)</option>
+        <option value="Metal" data-pts="1875">Metal (1875 pts/kg)</option>
+        <option value="Bateria" data-pts="313">Bateria (313 pts/kg)</option>
+        <option value="Motor" data-pts="1250">Motor (1250 pts/un)</option>
+        <option value="Latinha" data-pts="875">Latinha (875 pts/kg)</option>
+        <option value="Alumínio duro" data-pts="750">Alumínio duro (750 pts/kg)</option>
+        <option value="Panela" data-pts="750">Panela (750 pts/kg)</option>
+        <option value="Ferro normal" data-pts="38">Ferro normal (38 pts/kg)</option>
+        <option value="Ferro fundido" data-pts="100">Ferro fundido (100 pts/kg)</option>
+        <option value="Inox" data-pts="125">Inox (125 pts/kg)</option>
+        <option value="Papelão" data-pts="38">Papelão (38 pts/kg)</option>
+        <option value="PP" data-pts="38">PP (38 pts/kg)</option>
+        <option value="Plástico misto" data-pts="25">Plástico misto (25 pts/kg)</option>
+        <option value="PET misto" data-pts="100">PET misto (100 pts/kg)</option>
       </select>
  
       <input type="number" id="quantidade" step="0.01" min="0.01" value="1"
@@ -180,7 +201,7 @@
   </div>
 </div>
  
-<script>
+<script>  
 // ===================================================
 // CONFIGURAÇÃO FIREBASE
 // ===================================================
@@ -359,13 +380,22 @@ function registrar() {
   const material = document.getElementById('material').value;
   const qtd      = parseFloat(document.getElementById('quantidade').value);
  
+  if (!serie) { alert('⚠️ Selecione a série!'); return; }
   if (!qtd || qtd <= 0) { alert('⚠️ Informe uma quantidade válida!'); return; }
  
-  const pontos = Math.round(qtd * MATERIAIS[material]);
+  // pega os pontos direto do <select>
+  const select = document.getElementById('material');
+  const pontosPorKg = parseInt(select.options[select.selectedIndex].dataset.pts);
+ 
+  const pontos = Math.round(qtd * pontosPorKg);
  
   db.ref('registros').push({
     data: new Date().toISOString(),
-    serie, material, qtd, pontos
+    serie,
+    material,
+    qtd,
+    pontos,
+    pontosPorKg // extra (opcional, mas útil)
   })
   .then(() => {
     document.getElementById('quantidade').value = '1';
@@ -445,7 +475,40 @@ function mostrarToast(msg) {
   t._timeout = setTimeout(() => { t.style.opacity = '0'; }, 2800);
 }
 </script>
- 
+
+
+
+<footer>
+<footer class="mt-16 py-10 px-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Logos -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
+      <img src="./UNIJUÍ_logo_on_blue_background-removebg-preview.png" alt="Unijuí" class="h-12">
+    <div style="width:1px;height:60px;background:rgba(255,255,255,0.25);" class="hidden sm:block"></div>
+      <img src="./Logo_da_Escola_Municipal_de_Ensino_Fundamental-removebg-preview.png" alt="Escola" class="h-12">
+    </div>
+
+  <!-- Divisor -->
+    <div style="border-top: 1px solid rgba(255,255,255,0.15);" class="mb-8"></div>
+
+    <!-- Desenvolvedores -->
+    <div class="text-center">
+      <p class="text-emerald-300 text-xs font-semibold uppercase tracking-widest mb-3">Desenvolvido por</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-6">
+        <span class="bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white">Julia Keller Schafer</span>
+        <span class="bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white">Caroline da Rosa Wibelinger</span>
+        <span class="bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white">Bernardo Mentz Ribas</span>
+        <span class="bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white">Cauã Pagel Viecili</span>
+        <span class="bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white">Arthur Freistedt Copetti Santos</span>
+        <span class="bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white">João Pedro Knorr</span>
+      </div>
+      <p class="text-white/40 text-xs">Projeto Integrador — Unijuí &amp; EMEF Miguel Burnier © 2026</p>
+    </div>
+  </div>
+</footer>
+
+
+</footer>
 </body>
 </html>
  
