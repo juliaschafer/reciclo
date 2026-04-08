@@ -297,7 +297,7 @@ function atualizar() {
   // Barras
   document.getElementById('barras').innerHTML = ranking.map((r, i) => {
     const pct    = ((r.pts / maxPts) * 100).toFixed(1);
-    const medals = ['🥇','🥈','🥉','4️⃣'];
+    const medals = ['🥇','🥈','🥉','4️⃣','5️⃣', '6️⃣', '7️⃣', '8️⃣' ];
     return `
       <div class="bg-white rounded-3xl shadow-lg p-6 fade-up" style="animation-delay:${i*0.08}s">
         <div class="flex items-center justify-between mb-3">
