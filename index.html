@@ -60,37 +60,115 @@
     color: white;
     margin-top: 4rem;
   }
+
+  /* Mobile menu styles */
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #059669, #2563eb);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 50;
+    padding: 1rem;
+  }
+  .mobile-menu.open {
+    display: block;
+  }
+  .mobile-menu .nav-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.75rem;
+  }
+  .mobile-menu .nav-btn:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Mobile header adjustments */
+  @media (max-width: 767px) {
+    .mobile-status {
+      transform: scale(0.85);
+      transform-origin: left center;
+    }
+    .mobile-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
 </style>
+<base target="_blank">
 </head>
 
 <body>
 
 <!-- ===== NAVBAR ===== -->
 <nav class="header-bg text-white shadow-xl sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
 
-    <div class="flex items-center gap-3">
-      <span class="text-3xl font-extrabold tracking-tight cursor-pointer" onclick="mostrarView('view-publico')">ReCiclo 🌱</span>
-      <div class="flex items-center gap-2 bg-white/15 rounded-full px-3 py-1 text-xs font-medium">
-        <span id="dot-status" class="w-2 h-2 rounded-full animate-pulse dot-online"></span>
-        <span id="txt-status">Ao vivo</span>
+    <!-- Desktop/Tablet Header -->
+    <div class="hidden md:flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl font-extrabold tracking-tight cursor-pointer" onclick="mostrarView('view-publico')">ReCiclo 🌱</span>
+        <div class="flex items-center gap-2 bg-white/15 rounded-full px-3 py-1 text-xs font-medium">
+          <span id="dot-status" class="w-2 h-2 rounded-full animate-pulse dot-online"></span>
+          <span id="txt-status">Ao vivo</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1">
+        <button id="nav-ranking"     onclick="mostrarView('view-publico')"     class="nav-btn px-4 py-2.5 rounded-3xl font-medium">Ranking</button>
+        <button id="nav-informacoes" onclick="mostrarView('view-informacoes')" class="nav-btn px-4 py-2.5 rounded-3xl font-medium">Informações</button>
+        <button id="nav-parceiros"   onclick="mostrarView('view-parceiros')"   class="nav-btn px-4 py-2.5 rounded-3xl font-medium">Parceiros</button>
+        <button id="nav-missao"      onclick="mostrarView('view-missao')"      class="nav-btn px-4 py-2.5 rounded-3xl font-medium">Missão</button>
+
+        <button id="btn-admin" onclick="mostrarLogin()"
+          class="ml-2 px-5 py-2.5 bg-white text-emerald-700 rounded-3xl font-semibold shadow hover:shadow-md transition">
+          Admin
+        </button>
+
+        <div id="admin-info" class="hidden items-center gap-3 ml-2">
+          <span class="text-sm">Olá, <strong id="nome-admin"></strong></span>
+          <button onclick="logout()" class="px-4 py-2 bg-white/20 rounded-3xl text-sm hover:bg-white/30 transition">Sair</button>
+        </div>
       </div>
     </div>
 
-    <div class="flex items-center gap-1">
-      <button id="nav-ranking"     onclick="mostrarView('view-publico')"     class="nav-btn px-4 py-2.5 rounded-3xl font-medium">Ranking</button>
-      <button id="nav-informacoes" onclick="mostrarView('view-informacoes')" class="nav-btn px-4 py-2.5 rounded-3xl font-medium">Informações</button>
-      <button id="nav-parceiros"   onclick="mostrarView('view-parceiros')"   class="nav-btn px-4 py-2.5 rounded-3xl font-medium">Parceiros</button>
-      <button id="nav-missao"      onclick="mostrarView('view-missao')"      class="nav-btn px-4 py-2.5 rounded-3xl font-medium">Missão</button>
+    <!-- Mobile Header -->
+    <div class="md:hidden flex items-center justify-between">
+      <div class="flex items-center gap-2 mobile-title">
+        <span class="text-2xl font-extrabold tracking-tight cursor-pointer" onclick="mostrarView('view-publico')">ReCiclo 🌱</span>
+        <div class="mobile-status flex items-center gap-1.5 bg-white/15 rounded-full px-2.5 py-0.5 text-[10px] font-medium">
+          <span id="dot-status-mobile" class="w-1.5 h-1.5 rounded-full animate-pulse dot-online"></span>
+          <span id="txt-status-mobile">Ao vivo</span>
+        </div>
+      </div>
 
-      <button id="btn-admin" onclick="mostrarLogin()"
-        class="ml-2 px-5 py-2.5 bg-white text-emerald-700 rounded-3xl font-semibold shadow hover:shadow-md transition">
-        Admin
+      <button id="burger-btn" onclick="toggleMobileMenu()" class="p-2 rounded-xl hover:bg-white/20 transition">
+        <i class="fas fa-bars text-xl"></i>
       </button>
+    </div>
 
-      <div id="admin-info" class="hidden items-center gap-3 ml-2">
-        <span class="text-sm">Olá, <strong id="nome-admin"></strong></span>
-        <button onclick="logout()" class="px-4 py-2 bg-white/20 rounded-3xl text-sm hover:bg-white/30 transition">Sair</button>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu md:hidden">
+      <button id="nav-ranking-mobile"     onclick="mostrarView('view-publico'); toggleMobileMenu();"     class="nav-btn font-medium">Ranking</button>
+      <button id="nav-informacoes-mobile" onclick="mostrarView('view-informacoes'); toggleMobileMenu();" class="nav-btn font-medium">Informações</button>
+      <button id="nav-parceiros-mobile"   onclick="mostrarView('view-parceiros'); toggleMobileMenu();"   class="nav-btn font-medium">Parceiros</button>
+      <button id="nav-missao-mobile"      onclick="mostrarView('view-missao'); toggleMobileMenu();"      class="nav-btn font-medium">Missão</button>
+
+      <div class="border-t border-white/20 pt-3 mt-3">
+        <button id="btn-admin-mobile" onclick="mostrarLogin(); toggleMobileMenu();"
+          class="w-full px-5 py-2.5 bg-white text-emerald-700 rounded-xl font-semibold shadow hover:shadow-md transition">
+          Admin
+        </button>
+        <div id="admin-info-mobile" class="hidden mt-2">
+          <span class="text-sm block mb-2">Olá, <strong id="nome-admin-mobile"></strong></span>
+          <button onclick="logout(); toggleMobileMenu();" class="w-full px-4 py-2 bg-white/20 rounded-xl text-sm hover:bg-white/30 transition">Sair</button>
+        </div>
       </div>
     </div>
   </div>
@@ -236,11 +314,11 @@
 
   <a href="https://www.unijui.edu.br" target="_blank" class="block">
     <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-6 fade-up hover:scale-[1.02] transition-transform duration-300 cursor-pointer">
-      
+
       <div class="h-2 bg-gradient-to-r from-emerald-500 to-blue-500"></div>
-      
+
       <div class="p-8 flex flex-col sm:flex-row items-center gap-8">
-        
+
         <div class="flex-shrink-0 bg-gradient-to-br from-emerald-700 to-blue-800 rounded-2xl p-6 flex items-center justify-center" style="min-width:140px;min-height:100px;">
           <img src="./logo_unijui.png" alt="Unijuí" class="h-14 object-contain" style="filter:brightness(0) invert(1);opacity:0.95;">
         </div>
@@ -265,11 +343,11 @@
 
   <a href="https://www.instagram.com/miguel_burnier/" target="_blank" class="block">
   <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-8 fade-up hover:scale-[1.02] transition-transform duration-300 cursor-pointer" style="animation-delay:0.1s">
-    
+
     <div class="h-2 bg-gradient-to-r from-blue-500 to-emerald-500"></div>
-    
+
     <div class="p-8 flex flex-col sm:flex-row items-center gap-8">
-      
+
       <div class="flex-shrink-0 bg-gradient-to-br from-blue-700 to-emerald-800 rounded-2xl p-6 flex items-center justify-center" style="min-width:140px;min-height:100px;">
         <img src="./logo_escola.png" alt="EMEF Miguel Burnier" class="h-14 object-contain" style="filter:brightness(0) invert(1);opacity:0.95;">
       </div>
@@ -412,6 +490,14 @@ const NAV_MAP = {
 };
 
 // ===================================================
+// MOBILE MENU
+// ===================================================
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.toggle('open');
+}
+
+// ===================================================
 // NAVEGAÇÃO
 // ===================================================
 function mostrarView(id) {
@@ -427,9 +513,16 @@ function mostrarView(id) {
     alvo.classList.add('page-in');
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update desktop nav
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   const navId = NAV_MAP[id];
-  if (navId) document.getElementById(navId).classList.add('active');
+  if (navId) {
+    const desktopNav = document.getElementById(navId);
+    const mobileNav = document.getElementById(navId + '-mobile');
+    if (desktopNav) desktopNav.classList.add('active');
+    if (mobileNav) mobileNav.classList.add('active');
+  }
 }
 
 // ===================================================
@@ -447,14 +540,30 @@ db.ref('registros').on('value',
 db.ref('.info/connected').on('value', (snap) => { setStatus(snap.val() === true); });
 
 function setStatus(online) {
+  // Desktop status
   const dot = document.getElementById('dot-status');
   const txt = document.getElementById('txt-status');
-  if (online) {
-    dot.className = 'w-2 h-2 rounded-full animate-pulse dot-online';
-    txt.textContent = 'Ao vivo';
-  } else {
-    dot.className = 'w-2 h-2 rounded-full dot-offline';
-    txt.textContent = 'Offline';
+  if (dot && txt) {
+    if (online) {
+      dot.className = 'w-2 h-2 rounded-full animate-pulse dot-online';
+      txt.textContent = 'Ao vivo';
+    } else {
+      dot.className = 'w-2 h-2 rounded-full dot-offline';
+      txt.textContent = 'Offline';
+    }
+  }
+
+  // Mobile status
+  const dotMobile = document.getElementById('dot-status-mobile');
+  const txtMobile = document.getElementById('txt-status-mobile');
+  if (dotMobile && txtMobile) {
+    if (online) {
+      dotMobile.className = 'w-1.5 h-1.5 rounded-full animate-pulse dot-online';
+      txtMobile.textContent = 'Ao vivo';
+    } else {
+      dotMobile.className = 'w-1.5 h-1.5 rounded-full dot-offline';
+      txtMobile.textContent = 'Offline';
+    }
   }
 }
 
@@ -592,9 +701,21 @@ function fazerLogin() {
     fecharLogin();
     TODAS_VIEWS.forEach(v => document.getElementById(v).classList.add('hidden'));
     document.getElementById('view-admin').classList.remove('hidden');
+
+    // Desktop
     document.getElementById('btn-admin').classList.add('hidden');
     document.getElementById('admin-info').classList.remove('hidden');
     document.getElementById('nome-admin').textContent = user;
+
+    // Mobile
+    const btnAdminMobile = document.getElementById('btn-admin-mobile');
+    const adminInfoMobile = document.getElementById('admin-info-mobile');
+    if (btnAdminMobile) btnAdminMobile.classList.add('hidden');
+    if (adminInfoMobile) {
+      adminInfoMobile.classList.remove('hidden');
+      document.getElementById('nome-admin-mobile').textContent = user;
+    }
+
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     renderHistorico();
   } else {
@@ -605,8 +726,17 @@ function fazerLogin() {
 function logout() {
   logado = false;
   document.getElementById('view-admin').classList.add('hidden');
+
+  // Desktop
   document.getElementById('btn-admin').classList.remove('hidden');
   document.getElementById('admin-info').classList.add('hidden');
+
+  // Mobile
+  const btnAdminMobile = document.getElementById('btn-admin-mobile');
+  const adminInfoMobile = document.getElementById('admin-info-mobile');
+  if (btnAdminMobile) btnAdminMobile.classList.remove('hidden');
+  if (adminInfoMobile) adminInfoMobile.classList.add('hidden');
+
   mostrarView('view-publico');
 }
 
