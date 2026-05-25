@@ -215,20 +215,21 @@
         <option value="Turma 92">Turma 92</option>
       </select>
       <select id="material" class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-gray-50">
-        <option value="Cobre"          data-pts="5000">Cobre (5000 pts/kg)</option>
+<option value="Cobre"          data-pts="5000">Cobre (5000 pts/kg)</option>
         <option value="Metal"          data-pts="1875">Metal (1875 pts/kg)</option>
         <option value="Bateria"        data-pts="313">Bateria (313 pts/kg)</option>
         <option value="Motor"          data-pts="1250">Motor (1250 pts/un)</option>
         <option value="Latinha"        data-pts="875">Latinha (875 pts/kg)</option>
-        <option value="Alumínio duro"  data-pts="750">Alumínio duro (750 pts/kg)</option>
-        <option value="Panela"         data-pts="750">Panela (750 pts/kg)</option>
-        <option value="Ferro normal"   data-pts="38">Ferro normal (38 pts/kg)</option>
-        <option value="Ferro fundido"  data-pts="100">Ferro fundido (100 pts/kg)</option>
-        <option value="Inox"           data-pts="125">Inox (125 pts/kg)</option>
+        <option value="Alumínio duro"  data-pts="1500">Alumínio duro (1500 pts/kg)</option>
+        <option value="Panela"         data-pts="1500">Panela (1500 pts/kg)</option>
+        <option value="Ferro normal"   data-pts="70">Ferro normal (70 pts/kg)</option>
+        <option value="Ferro fundido"  data-pts="70">Ferro fundido (70 pts/kg)</option>
+        <option value="Inox"           data-pts="1500">Inox (1500 pts/kg)</option>
         <option value="Papelão"        data-pts="38">Papelão (38 pts/kg)</option>
-        <option value="PP"             data-pts="38">PP (38 pts/kg)</option>
-        <option value="Plástico misto" data-pts="25">Plástico misto (25 pts/kg)</option>
+        <option value="PP"             data-pts="50">PP (50 pts/kg)</option>
+        <option value="Plástico misto" data-pts="50">Plástico misto (50 pts/kg)</option>
         <option value="PET misto"      data-pts="100">PET misto (100 pts/kg)</option>
+
       </select>
       <input type="number" id="quantidade" step="0.01" min="0.01" value="1"
         class="px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-gray-50"
@@ -342,16 +343,17 @@
           <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🔩 Metal</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">1.875</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
           <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">⚙️ Motor</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">1.250</td><td class="py-4 px-8 text-right text-gray-400">pts/<strong>un</strong></td></tr>
           <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🥤 Latinha</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">875</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
-          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">🪙 Alumínio Duro</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">750</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
-          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🍳 Panela</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">750</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
-          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">✨ Inox</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">125</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
+          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">🪙 Alumínio Duro</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">1.500</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
+          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🍳 Panela</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">1.500</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
+          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">✨ Inox</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">1.500</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
           <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🔋 Bateria</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">313</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
           <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">🍶 PET Misto</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">100</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
-          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">⚓ Ferro Fundido</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">100</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
+          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">⚓ Ferro Fundido</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">70</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
           <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">📦 Papelão</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">38</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
-          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🧴 PP (Polipropileno)</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">38</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
-          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">🔧 Ferro Normal</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">38</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
-          <tr class="hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🛍️ Plástico Misto</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">25</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
+          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🧴 PP (Polipropileno)</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">50</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
+          <tr class="border-b border-gray-50 hover:bg-emerald-50 transition"><td class="py-4 px-8 font-medium text-gray-700">🔧 Ferro Normal</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">70</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
+          <tr class="hover:bg-emerald-50 transition bg-gray-50/40"><td class="py-4 px-8 font-medium text-gray-700">🛍️ Plástico Misto</td><td class="py-4 px-8 text-right font-bold text-emerald-600 text-base">50</td><td class="py-4 px-8 text-right text-gray-400">pts/kg</td></tr>
+
         </tbody>
       </table>
     </div>
